@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile | AMS</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: small;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header Styles */
+        #header {
+            background-image: linear-gradient(to bottom, #4a4a4a 1%, #3f3f3f 73%, #3f3f3f 100%);
+            height: 50px;
+            color: white;
+            padding: 0 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #logo-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        #logo {
+            width: auto;
+        }
+        
+        #logo img {
+            width: 100px !important;
+            height: auto;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-icon {
+            color: white;
+            font-size: 16px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .header-icon:hover {
+            color: #ffcc00;
+        }
+        
+        /* Sidebar Styles */
+        #sidebar-container {
+            position: fixed;
+            top: 50px;
+            left: 0;
+            bottom: 0;
+            width: 220px;
+            background-image: linear-gradient(to bottom, #4a4a4a 1%, #3f3f3f 73%, #3f3f3f 100%);
+            color: white;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        
+        #sidebar {
+            padding: 15px 0;
+        }
+        
+        .user-info {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid black;
+            margin-bottom: 10px;
+        }
+        
+        .user-info b {
+            color: wheat;
+            font-size: 12px;
+        }
+        
+        .user-info div {
+            margin-bottom: 5px;
+        }
+        
+        .user-role {
+            color: wheat;
+            font-size: 11px;
+        }
+        
+        .system-name {
+            color: wheat;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+        
+        /* Navigation Menu */
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: white;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: wheat;
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: wheat;
+            border-left: 3px solid #c9302c;
+        }
+        
+        .nav-icon {
+            width: 30px;
+            font-size: 16px;
+        }
+        
+        .nav-text {
+            flex: 1;
+        }
+        
+        .submenu {
+            list-style: none;
+            padding-left: 30px;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        .submenu.show {
+            display: block;
+        }
+        
+        .submenu .nav-link {
+            padding: 6px 15px;
+            font-size: 11px;
+        }
+        
+        .has-submenu .nav-link::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-left: auto;
+            transition: transform 0.3s;
+        }
+        
+        .has-submenu.open .nav-link::after {
+            transform: rotate(180deg);
+        }
+        
+        /* Main Content Area */
+        #main-content {
+            margin-left: 220px;
+            margin-top: 50px;
+            padding: 15px;
+            flex: 1;
+            transition: margin-left 0.3s;
+        }
+        
+        /* Content Styles */
+        .btn-danger {
+            color: #fff;
+            background-color: #c9302c;
+            border-color: #c12e2a;
+        }
+        
+        .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
+            color: #fff;
+            background-color: #c9302c;
+            border-color: #c12e2a;
+        }
+        
+        .btn-default {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        
+        a:focus, a:hover {
+            color: red;
+        }
+        
+        .page-header {
+            background-image: linear-gradient(to bottom, #4a4a4a 1%, #3f3f3f 73%, #3f3f3f 100%);
+            color: wheat;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .radiusdesign {
+            border-radius: 15px !important;
+        }
+        
+        .profile-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            background-color: lightgray;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+        
+        .info-item {
+            margin-bottom: 12px;
+        }
+        
+        .info-label {
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .info-value {
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border: 3px solid gray;
+            background-color: lightgray;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        
+        .student-id {
+            color: #c9302c;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .student-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .program-name {
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .school-name {
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .alert-note {
+            background-color: lightgray;
+            color: black;
+            border: none;
+            border-radius: 15px;
+            padding: 8px;
+            margin-bottom: 15px;
+            font-size: 11px;
+        }
+        
+        .requirement-item {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 2px solid #c12e2a;
+        }
+        
+        .requirement-status {
+            color: #c12e2a;
+            font-size: 11px;
+        }
+        
+        .requirement-name {
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .requirement-processed {
+            color: gray;
+            font-size: 11px;
+        }
+        
+        /* Mobile Sidebar Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+        
+        .mobile-header {
+            display: none;
+            background-image: linear-gradient(to bottom, #4a4a4a 1%, #3f3f3f 73%, #3f3f3f 100%);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .mobile-header img {
+            width: 80px;
+            height: auto;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            #sidebar-container {
+                transform: translateX(-100%);
+            }
+            
+            #sidebar-container.show {
+                transform: translateX(0);
+                width: 250px;
+            }
+            
+            #main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .header-actions {
+                display: none;
+            }
+            
+            .mobile-header {
+                display: block;
+            }
+            
+            #header {
+                display: none;
+            }
+            
+            #main-content {
+                margin-top: 60px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .col-lg-6, .col-md-6 {
+                width: 100%;
+            }
+            
+            .profile-pic-container {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            
+            .profile-pic {
+                width: 150px;
+                height: 150px;
+            }
+        }
+        
+        /* Print button in header */
+        .print-button {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: wheat;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        
+        .print-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <img src="styles/img/UBanner.png" alt="University of Baguio">
+        <div style="font-size: 12px; margin-top: 5px;">Academic Management System</div>
+    </div>
+    
+    <!-- Sidebar Toggle for Mobile -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Header -->
+    <header id="header">
+        <div id="logo-group">
+            <span id="logo">
+                <!-- Replace with your actual image path -->
+                <img src="styles/img/UBanner.png" alt="AMS" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x40/333333/FFFFFF?text=UB+BANNER'">
+            </span>
+        </div>
+        
+        <div class="header-actions">
+            <div class="header-icon" title="Collapse Menu">
+                <i class="fas fa-reorder"></i>
+            </div>
+            <div class="header-icon" title="Full Screen">
+                <i class="fas fa-arrows-alt"></i>
+            </div>
+            <div class="header-icon" title="Sign Out">
+                <i class="fas fa-sign-out"></i>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Sidebar -->
+    <div id="sidebar-container">
+        <div id="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div>
+                    <b>Academic Management System</b>
+                </div>
+                <div>
+                    <b>AMBER CARLO M. HUELAR</b>
+                </div>
+                <div class="user-role">
+                    Student
+                </div>
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-danger btn-xs" style="font-size: 9px;">
+                        <i class="fa fa-key"></i> Change Password
+                    </button>
+                </div>
+                <div class="system-name">
+                    <b>AMS : Baccalaureate - SIT</b>
+                </div>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-dashboard"></i></span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <span class="nav-icon"><i class="fas fa-user-circle"></i></span>
+                        <span class="nav-text">Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-file"></i></span>
+                        <span class="nav-text">Schedule</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-file-text"></i></span>
+                        <span class="nav-text">Grades Records</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-file"></i></span>
+                        <span class="nav-text">Enrollment</span>
+                    </a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-money"></i></span>
+                        <span class="nav-text">Account and Assessment</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-money"></i></span>
+                        <span class="nav-text">Online Payment</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Page Header with Print Button -->
+        <div class="row page-header">
+            <div class="col-sm-8">
+                <h2 style="font-size:14px; margin:0;">
+                    <i class="fas fa-id-card"></i> Student <i class="fas fa-arrow-right"></i> <b>Information</b>
+                </h2>
+            </div>
+            <div class="col-sm-4 text-end">
+                <button class="print-button">
+                    <i class="fas fa-print"></i> <b>Print Profile I</b>
+                </button>
+                <button class="print-button">
+                    <i class="fas fa-print"></i> <b>Print Profile II</b>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Profile Content -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="profile-section">
+                    <!-- Student Basic Info Row -->
+                    <div class="row mb-3">
+                        <div class="col-lg-2 col-md-3 text-center profile-pic-container">
+                            <!-- Replace with your actual male.png image path -->
+                            <img src="studentpics/male.png" alt="Student Photo" class="profile-pic" onerror="this.onerror=null; this.src='https://via.placeholder.com/200x200/CCCCCC/808080?text=STUDENT'">
+                            
+                            <div class="d-grid gap-2 mt-3">
+                                <button class="btn btn-danger btn-sm">
+                                    <i class="fas fa-edit"></i> <b>Edit Information</b>
+                                </button>
+                                <button class="btn btn-default btn-sm">
+                                    <i class="fas fa-list"></i> <b>Grades Record</b>
+                                </button>
+                                <button class="btn btn-default btn-sm">
+                                    <i class="fas fa-eye-slash"></i> <b>View Assessment of Fees</b>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-10 col-md-9">
+                            <div class="student-id">20255553</div>
+                            <div class="student-name">AMBER CARLO M. HUELAR</div>
+                            <div class="program-name">BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY (BSIT(ICT))</div>
+                            <div class="school-name">SCHOOL OF INFORMATION TECHNOLOGY <i>(Baccalaureate)</i></div>
+                            <div class="mt-2">
+                                <b>CURRICULUM</b> <span style="color:#c9302c">2025</span>
+                            </div>
+                            <div class="mt-1">
+                                <b>LEVEL</b> <span>First Year</span>
+                            </div>
+                            <div class="mt-3">
+                                <div style="font-size: 11px;">
+                                    <b>ADMITTED BY:</b>
+                                </div>
+                                <div style="font-size: 11px; margin-top: 3px;">
+                                    <b>ARC_ALPHA</b>
+                                </div>
+                                <div style="font-size: 11px; color: #666;">
+                                    <i>June 30, 2025 - 09:48 PM</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Alert for Confidential Information -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="alert alert-warning p-2" style="font-size:11px; background-color:#fff3cd;">
+                                <i class="fas fa-exclamation-triangle"></i> You're viewing a confidential/sensitive information of student. Do not share information listed below to an unauthorized person!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Personal & Contact Information Row -->
+                    <div class="row">
+                        <!-- Personal Information -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>PERSONAL AND PHYSICAL INFORMATION</b>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">DEC 7, 2005</div>
+                                        <div class="info-label">Birthday</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">BAGUIO CITY</div>
+                                        <div class="info-label">Birthplace</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">N/A</div>
+                                        <div class="info-label">Religion</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">MALE</div>
+                                        <div class="info-label">Gender</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">SINGLE</div>
+                                        <div class="info-label">Civil Status</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">FILIPINO</div>
+                                        <div class="info-label">Mother Tongue</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">FILIPINO</div>
+                                        <div class="info-label">Nationality</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">165 cm</div>
+                                        <div class="info-label">Height (cm)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Information -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>CONTACT INFORMATION</b>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">09811720189</div>
+                                        <div class="info-label">Mobile Number</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">HUELAR21@gmail.com</div>
+                                        <div class="info-label">E-mail Address</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">#52, CITY CAMP, BAGUIO CITY BENGUET 2600</div>
+                                        <div class="info-label">Current Address</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">SAME WITH RESIDENTIAL ADDRESS</div>
+                                        <div class="info-label">Permanent Address</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Academic & ALS Information Row -->
+                    <div class="row mt-4">
+                        <!-- Academic Information -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>ACADEMIC INFORMATION</b>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">-</div>
+                                        <div class="info-label">Learners Reference Number</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">-</div>
+                                        <div class="info-label">Education Service Contracting</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">-</div>
+                                        <div class="info-label">Qualified Voucher Recipents</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">-</div>
+                                        <div class="info-label">Public</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">2025</div>
+                                        <div class="info-label">Admission Year</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">NEW STUDENT / REGULAR</div>
+                                        <div class="info-label">Admission / Academic Status</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ALS Information -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>ALTERNATIVE LEARNING SYSTEM (ALS)</b>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="info-item">
+                                        <div class="info-value">-</div>
+                                        <div class="info-label">PEPT</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">FILIPINO</div>
+                                        <div class="info-label">ALS</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Educational Background & Guardian Information Row -->
+                    <div class="row mt-4">
+                        <!-- Educational Background -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>EDUCATIONAL BACKGROUND</b>
+                            </div>
+                            
+                            <div class="info-item mb-3">
+                                <div class="info-value">BAGUIO CITY HIGH SCHOOL</div>
+                                <div class="info-label">Last School Attended</div>
+                            </div>
+                            
+                            <!-- Elementary -->
+                            <div class="mb-4">
+                                <div style="color:#c12e2a; font-size:11px; margin-bottom:5px;">
+                                    <i class="fas fa-graduation-cap"></i> ELEMENTARY School
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">BAGUIO CENTRAL UNIVERSITY</div>
+                                    <div class="info-label">School</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">ELEMENTARY</div>
+                                    <div class="info-label">Program</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">LOWER P. BURGOS STREET.</div>
+                                    <div class="info-label">Address</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">2019</div>
+                                    <div class="info-label">Year Graduated</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">Dec 31, 0</div>
+                                    <div class="info-label">Date Graduated</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Junior High -->
+                            <div class="mb-4">
+                                <div style="color:#c12e2a; font-size:11px; margin-bottom:5px;">
+                                    <i class="fas fa-graduation-cap"></i> JUNIOR HIGH School
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">BAGUIO CITY HIGH SCHOOL</div>
+                                    <div class="info-label">School</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">JUNIOR HIGH</div>
+                                    <div class="info-label">Program</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">GOVERNOR PACK ROAD</div>
+                                    <div class="info-label">Address</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">2023</div>
+                                    <div class="info-label">Year Graduated</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">Dec 31, 0</div>
+                                    <div class="info-label">Date Graduated</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Senior High -->
+                            <div class="mb-4">
+                                <div style="color:#c12e2a; font-size:11px; margin-bottom:5px;">
+                                    <i class="fas fa-graduation-cap"></i> SENIOR HIGH School
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">BAGUIO CITY HIGH SCHOOL</div>
+                                    <div class="info-label">School</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">HUMSS</div>
+                                    <div class="info-label">Program</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">GOVERNOR PACK ROAD</div>
+                                    <div class="info-label">Address</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">2025</div>
+                                    <div class="info-label">Year Graduated</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value">Dec 31, 0</div>
+                                    <div class="info-label">Date Graduated</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Guardian Information -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>GUARDIAN INFORMATION</b>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">HUELAR, MARITES</div>
+                                        <div class="info-label">Guardian Name</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">0911234512</div>
+                                        <div class="info-label">Contact Number</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">HOUSEWIFE</div>
+                                        <div class="info-label">Occupation</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">#52, CITY CAMP, BAGUIO CITY BENGUET 2600</div>
+                                        <div class="info-label">Address</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">MOTHER</div>
+                                        <div class="info-label">Relationship</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Parents Information -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>PARENTS INFORMATION</b>
+                            </div>
+                        </div>
+                        
+                        <!-- Mother's Information -->
+                        <div class="col-lg-6 col-md-6">
+                            <div style="color:#c12e2a; font-size:11px; margin-bottom:15px;">
+                                <i class="fas fa-female"></i> MOTHER INFORMATION
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">DUSALEN, MARY ANN TAMALE</div>
+                                        <div class="info-label">Name</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">09480984141</div>
+                                        <div class="info-label">Contact Number</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">HOUSEWIFE</div>
+                                        <div class="info-label">Occupation</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">#52, CITY CAMP, BAGUIO CITY BENGUET 2600</div>
+                                        <div class="info-label">Address</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">-</div>
+                                        <div class="info-label">E-mail Address</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Father's Information -->
+                        <div class="col-lg-6 col-md-6">
+                            <div style="color:#c12e2a; font-size:11px; margin-bottom:15px;">
+                                <i class="fas fa-male"></i> FATHER INFORMATION
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">HUELAR, MARK</div>
+                                        <div class="info-label">Name</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">09451203452</div>
+                                        <div class="info-label">Contact Number</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">RETIRED POLICE</div>
+                                        <div class="info-label">Occupation</div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-value">#52, CITY CAMP, BAGUIO CITY BENGUET 2600</div>
+                                        <div class="info-label">Address</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <div class="info-value">-</div>
+                                        <div class="info-label">E-mail Address</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Requirements Section -->
+                    <div class="row mt-4">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>DEFICIENCY</b>
+                            </div>
+                            
+                            <div class="alert-note">
+                                NO DATA RETRIEVED FROM SERVER
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 col-md-6">
+                            <div class="section-title">
+                                <i class="fas fa-circle-notch"></i> <b>REQUIREMENTS</b>
+                            </div>
+                            
+                            <div class="row">
+                                <!-- Requirement Items -->
+                                <div class="col-lg-6">
+                                    <div class="requirement-item">
+                                        <div class="requirement-status">
+                                            <i class="fas fa-calendar"></i> Jul 01, 2025 04:16 PM (Received)
+                                        </div>
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> F138
+                                        </div>
+                                        <div class="requirement-processed">
+                                            <i class="fas fa-user"></i> ORLANDO B REGACHO
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> F137 ISSUED FOR UB
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> TRANSFER CREDENTIALS
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> COPY OF GRADES
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-status">
+                                            <i class="fas fa-calendar"></i> Jul 01, 2025 04:16 PM (Received)
+                                        </div>
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> PSA BIRTH CERTIFICATE
+                                        </div>
+                                        <div class="requirement-processed">
+                                            <i class="fas fa-user"></i> ORLANDO B REGACHO
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-6">
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> GOOD MORAL CERTIFICATE
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> OFFICIAL TRANSCRIPT OF RECORDS ISSUED FOR UNIVERSITY OF BAGUIO
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> ALS A&E CERTIFICATE/DIPLOMA
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> ALS A&E RATING CARD
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> F137 (UNOFFICIAL COPY)
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="requirement-item">
+                                        <div class="requirement-name">
+                                            <i class="fas fa-arrow-right"></i> CROSS ENROLLMENT PERMIT
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="row mt-4">
+                        <div class="col-12 text-end">
+                            <div style="font-size:11px; color:#666;">
+                                <i>Profile Information (mloquinque)</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar-container').classList.toggle('show');
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar-container');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            if (window.innerWidth <= 992) {
+                if (!sidebar.contains(event.target) && !toggleBtn.contains(event.target) && sidebar.classList.contains('show')) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+        
+        // Toggle submenus
+        const submenuToggles = document.querySelectorAll('.has-submenu > .nav-link');
+        submenuToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                const submenu = parent.querySelector('.submenu');
+                
+                if (submenu) {
+                    parent.classList.toggle('open');
+                    submenu.classList.toggle('show');
+                }
+            });
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar-container');
+            if (window.innerWidth > 992) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
